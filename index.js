@@ -2497,7 +2497,66 @@ document.addEventListener("DOMContentLoaded", function () {
   const API_KEY = "969e9f32437ce35f25af6d1453";
   const DEFAULT_KN_URL = "https://hub.sciencecreates.co.uk/";
 
-  // Prevent Google Analytics tracking on Ghost article links
+  // Function to setup click handlers for Ghost article links
+  function setupGhostLinkHandlers() {
+    // Use MutationObserver to handle dynamically added links
+    const observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        mutation.addedNodes.forEach(function (node) {
+          if (node.nodeType === 1) {
+            // Element node
+            // Find all ghost article links in the added content
+            const links = node.querySelectorAll
+              ? node.querySelectorAll(".ghost-article-link")
+              : [];
+            if (
+              node.classList &&
+              node.classList.contains("ghost-article-link")
+            ) {
+              links.push(node);
+            }
+
+            links.forEach(function (link) {
+              // Remove any existing onclick handlers
+              link.onclick = null;
+
+              // Add our clean click handler
+              link.addEventListener(
+                "click",
+                function (e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  e.stopImmediatePropagation();
+
+                  // Get the href without any modifications
+                  const originalHref = this.getAttribute("href");
+
+                  // Open directly without allowing GA to modify
+                  setTimeout(() => {
+                    window.open(originalHref, "_blank", "noopener");
+                  }, 0);
+
+                  return false;
+                },
+                true
+              );
+            });
+          }
+        });
+      });
+    });
+
+    // Start observing the document
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+  }
+
+  // Setup handlers immediately
+  setupGhostLinkHandlers();
+
+  // Also add a global delegated event handler as backup
   document.addEventListener(
     "click",
     function (e) {
@@ -2505,21 +2564,17 @@ document.addEventListener("DOMContentLoaded", function () {
       if (link && link.href) {
         e.preventDefault();
         e.stopPropagation();
+        e.stopImmediatePropagation();
 
-        // Get clean URL without tracking parameters
-        const url = new URL(link.href);
-        url.searchParams.delete("_gl");
-        url.searchParams.delete("_ga");
-        url.searchParams.delete("utm_source");
-        url.searchParams.delete("utm_medium");
-        url.searchParams.delete("utm_campaign");
-        url.searchParams.delete("utm_term");
-        url.searchParams.delete("utm_content");
-        url.searchParams.delete("fbclid");
-        url.searchParams.delete("gclid");
+        // Get original href
+        const originalHref = link.getAttribute("href");
 
-        // Open clean URL in new tab
-        window.open(url.toString(), "_blank", "noopener");
+        // Open in new tab with clean URL
+        setTimeout(() => {
+          window.open(originalHref, "_blank", "noopener");
+        }, 0);
+
+        return false;
       }
     },
     true

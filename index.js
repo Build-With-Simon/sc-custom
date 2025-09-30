@@ -2497,6 +2497,34 @@ document.addEventListener("DOMContentLoaded", function () {
   const API_KEY = "969e9f32437ce35f25af6d1453";
   const DEFAULT_KN_URL = "https://hub.sciencecreates.co.uk/";
 
+  // Prevent Google Analytics tracking on Ghost article links
+  document.addEventListener(
+    "click",
+    function (e) {
+      const link = e.target.closest(".ghost-article-link");
+      if (link && link.href) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Get clean URL without tracking parameters
+        const url = new URL(link.href);
+        url.searchParams.delete("_gl");
+        url.searchParams.delete("_ga");
+        url.searchParams.delete("utm_source");
+        url.searchParams.delete("utm_medium");
+        url.searchParams.delete("utm_campaign");
+        url.searchParams.delete("utm_term");
+        url.searchParams.delete("utm_content");
+        url.searchParams.delete("fbclid");
+        url.searchParams.delete("gclid");
+
+        // Open clean URL in new tab
+        window.open(url.toString(), "_blank", "noopener");
+      }
+    },
+    true
+  );
+
   async function fetchAndRenderGhostPosts({
     targetId,
     initialLimit = 3,
@@ -2598,7 +2626,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="row knwldge_hub_row">
                     <div class="col col-3 knwldge_hub_img_col">
                         <div class="knwldge_hub_img_box">
-                            <a href="${DEFAULT_KN_URL}${post.slug}/" target="_blank" rel="noopener" class="knwldge_hhub_lnk_box w-inline-block">
+                            <a href="${DEFAULT_KN_URL}${post.slug}/" target="_blank" rel="noopener" data-ga-link="false" class="knwldge_hhub_lnk_box ghost-article-link w-inline-block">
                                 <img src="${featureImage}" loading="lazy" alt="${post.title}" class="knwldge_hub_img">
                             </a>
                         </div>
@@ -2611,12 +2639,12 @@ document.addEventListener("DOMContentLoaded", function () {
                                     <div class="knwldge_cat_box"><div class="evnts_type_tag"><div>${primaryTag}</div></div></div>
                                 </div>
                                 <div class="knwldge_ttle_box pr_big">
-                                    <a href="${DEFAULT_KN_URL}${post.slug}/" target="_blank" rel="noopener" class="knwldge_ttle_lnk title_h2 w-inline-block">
+                                    <a href="${DEFAULT_KN_URL}${post.slug}/" target="_blank" rel="noopener" data-ga-link="false" class="knwldge_ttle_lnk title_h2 ghost-article-link w-inline-block">
                                         <div>${post.title}</div>
                                     </a>
                                 </div>
                                 <div class="knwldge_bttm_bttn_box">
-                                    <a href="${DEFAULT_KN_URL}${post.slug}/" target="_blank" rel="noopener" class="shape_bttn w-inline-block">
+                                    <a href="${DEFAULT_KN_URL}${post.slug}/" target="_blank" rel="noopener" data-ga-link="false" class="shape_bttn ghost-article-link w-inline-block">
                                         <div class="shpe_cover_one">
                                             <img src="https://cdn.prod.website-files.com/6793cf33c35e2c59ec3c7f51/67ac73219c9a93e810f6683c_arrw_top_rght.svg" class="bttn_shape">
                                         </div>
@@ -2903,12 +2931,12 @@ document.addEventListener("DOMContentLoaded", function () {
           "https://via.placeholder.com/600x400?text=No+Image";
         return `
                     <div class="sptlght_img_box">
-                        <a href="${DEFAULT_KN_URL}${post.slug}/" target="_blank" rel="noopener" class="sptlght_img_lnk w-inline-block">
+                        <a href="${DEFAULT_KN_URL}${post.slug}/" target="_blank" rel="noopener" data-ga-link="false" class="sptlght_img_lnk ghost-article-link w-inline-block">
                             <img src="${featureImage}" loading="lazy" alt="${post.title}" class="sptlght_img">
                         </a>
                     </div>
                     <div class="sptlght_ttle_box">
-                        <a href="${DEFAULT_KN_URL}${post.slug}/" target="_blank" rel="noopener" class="sptlght_ttle_lnk">${post.title}</a>
+                        <a href="${DEFAULT_KN_URL}${post.slug}/" target="_blank" rel="noopener" data-ga-link="false" class="sptlght_ttle_lnk ghost-article-link">${post.title}</a>
                     </div>`;
       },
     });

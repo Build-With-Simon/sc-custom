@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTM Tracker Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0052a3;
+        }
+        .typeform-link {
+            display: inline-block;
+            background: #262627;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .typeform-link:hover {
+            background: #000;
+        }
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 UTM Tracker Test Page</h1>
+
+    <div class="test-section">
+        <h2>Step 1: Add UTMs to URL</h2>
+        <p>Click one of these buttons to add test UTMs to your URL:</p>
+        <button onclick="addUTMs('linkedin')">LinkedIn Campaign</button>
+        <button onclick="addUTMs('email')">Email Campaign</button>
+        <button onclick="addUTMs('twitter')">Twitter Campaign</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Step 2: Check Stored UTMs</h2>
+        <button onclick="checkStoredUTMs()">Check Stored UTMs</button>
+        <button onclick="clearUTMs()">Clear UTMs</button>
+        <pre id="utm-display">Click "Check Stored UTMs" to see what's stored...</pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Step 3: Test Typeform Links</h2>
+        <p>These links should automatically have UTMs appended:</p>
+        <a href="https://form.typeform.com/to/test123" class="typeform-link" target="_blank">
+            Test Typeform Link 1
+        </a>
+        <br>
+        <a href="https://yourcompany.typeform.com/to/abc456?existing=param" class="typeform-link" target="_blank">
+            Test Typeform Link 2 (with existing params)
+        </a>
+        <br>
+        <p><small>Hover over links to see the full URL with UTMs in your browser status bar</small></p>
+    </div>
+
+    <div class="test-section">
+        <h2>Step 4: Test Dynamic Link</h2>
+        <button onclick="addDynamicLink()">Add New Typeform Link</button>
+        <div id="dynamic-links"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Console Commands</h2>
+        <p>Open browser console (F12) and try these commands:</p>
+        <pre>// Get stored UTMs
+SCUTMTracker.get()
+
+// Capture UTMs from current URL
+SCUTMTracker.capture()
+
+// Clear stored UTMs
+SCUTMTracker.clear()
+
+// Manually process links
+SCUTMTracker.processLinks()</pre>
+    </div>
+
+    <!-- Include the UTM tracker script -->
+    <script src="utm-tracker.js"></script>
+
+    <!-- Test page functions -->
+    <script>
+        function addUTMs(source) {
+            const campaigns = {
+                'linkedin': {
+                    utm_source: 'linkedin',
+                    utm_medium: 'social',
+                    utm_campaign: 'jan2025',
+                    utm_content: 'test-post'
+                },
+                'email': {
+                    utm_source: 'newsletter',
+                    utm_medium: 'email',
+                    utm_campaign: 'weekly-digest',
+                    utm_content: 'cta-button'
+                },
+                'twitter': {
+                    utm_source: 'twitter',
+                    utm_medium: 'social',
+                    utm_campaign: 'product-launch',
+                    utm_term: 'keywords'
+                }
+            };
+
+            const params = new URLSearchParams(campaigns[source]);
+            const newUrl = window.location.pathname + '?' + params.toString();
+            window.history.pushState({}, '', newUrl);
+
+            // Trigger capture
+            SCUTMTracker.capture();
+
+            // Show success message
+            alert('✅ UTMs added to URL! Check the address bar and stored UTMs.');
+            checkStoredUTMs();
+        }
+
+        function checkStoredUTMs() {
+            const stored = SCUTMTracker.get();
+            const display = document.getElementById('utm-display');
+
+            if (stored) {
+                display.innerHTML = '<span class="success">✅ UTMs Found:</span>\n' + JSON.stringify(stored, null, 2);
+            } else {
+                display.innerHTML = '<span class="error">❌ No UTMs stored</span>\n\nAdd UTMs using Step 1 buttons above.';
+            }
+        }
+
+        function clearUTMs() {
+            SCUTMTracker.clear();
+            alert('🗑️ UTMs cleared!');
+            checkStoredUTMs();
+        }
+
+        function addDynamicLink() {
+            const container = document.getElementById('dynamic-links');
+            const link = document.createElement('a');
+            link.href = 'https://form.typeform.com/to/dynamic' + Date.now();
+            link.className = 'typeform-link';
+            link.target = '_blank';
+            link.textContent = 'Dynamic Typeform Link (added at ' + new Date().toLocaleTimeString() + ')';
+            link.style.display = 'block';
+            link.style.marginTop = '10px';
+            container.appendChild(link);
+
+            alert('✅ New link added! Hover over it to see UTMs automatically appended.');
+        }
+
+        // Enable debug mode for testing
+        SCUTMTracker.config.debug = true;
+    </script>
+</body>
+</html>

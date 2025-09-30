@@ -2529,7 +2529,12 @@ document.addEventListener("DOMContentLoaded", function () {
                   e.stopImmediatePropagation();
 
                   // Get the href without any modifications
-                  const originalHref = this.getAttribute("href");
+                  let originalHref = this.getAttribute("href");
+
+                  // Strip Google Analytics parameters
+                  if (originalHref && originalHref.includes('?_gl=')) {
+                    originalHref = originalHref.split('?_gl=')[0];
+                  }
 
                   // Open directly without allowing GA to modify
                   setTimeout(() => {
@@ -2567,7 +2572,12 @@ document.addEventListener("DOMContentLoaded", function () {
         e.stopImmediatePropagation();
 
         // Get original href
-        const originalHref = link.getAttribute("href");
+        let originalHref = link.getAttribute("href");
+
+        // Strip Google Analytics parameters
+        if (originalHref && originalHref.includes('?_gl=')) {
+          originalHref = originalHref.split('?_gl=')[0];
+        }
 
         // Open in new tab with clean URL
         setTimeout(() => {

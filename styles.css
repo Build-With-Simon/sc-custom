@@ -204,6 +204,10 @@ body.dark_mode .basic_bttn {
   color: var(--charcoal-black);
 }
 
+body.dark_mode .basic_bttn .bttn_txt {
+  color: inherit;
+}
+
 body.dark_mode
   .basic_bttn
   .bttn_icon:not(
@@ -2218,6 +2222,10 @@ p:last-child {
 body.dark_mode .basic_bttn {
   background: var(--pure-white);
   color: var(--charcoal-black);
+}
+
+body.dark_mode .basic_bttn .bttn_txt {
+  color: inherit;
 }
 
 body.dark_mode

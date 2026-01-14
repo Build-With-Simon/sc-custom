@@ -205,7 +205,7 @@ body.dark_mode .basic_bttn {
 }
 
 body.dark_mode .basic_bttn .bttn_txt {
-  color: inherit;
+  color: var(--charcoal-black);
 }
 
 body.dark_mode
@@ -2225,7 +2225,7 @@ body.dark_mode .basic_bttn {
 }
 
 body.dark_mode .basic_bttn .bttn_txt {
-  color: inherit;
+  color: var(--charcoal-black);
 }
 
 body.dark_mode

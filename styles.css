@@ -307,6 +307,24 @@ body.dark_mode .eco_box {
   border-color: rgba(255, 255, 255, 1);
 }
 
+/* Knowledge Hub — Webflow CMS blog-row markup (dark mode) */
+body.dark_mode .knwldge_hub_section .blog-row-heading {
+  color: var(--pure-white);
+}
+
+body.dark_mode .knwldge_hub_section .blog-row-heading-wrap:hover .blog-row-heading {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+body.dark_mode .knwldge_hub_section .blog-row-date {
+  color: var(--pure-white);
+}
+
+body.dark_mode .knwldge_hub_section .blog-row-cat {
+  background: var(--pure-white);
+  color: var(--charcoal-black);
+}
+
 body.dark_mode .eco_logo_prt {
   border-color: rgba(255, 255, 255, 1);
 }
@@ -2330,6 +2348,24 @@ body.dark_mode .knwldge_info_box_innr,
 body.dark_mode .knwldge_info_hdr,
 body.dark_mode .eco_box {
   border-color: rgba(255, 255, 255, 1);
+}
+
+/* Knowledge Hub — Webflow CMS blog-row markup (dark mode) */
+body.dark_mode .knwldge_hub_section .blog-row-heading {
+  color: var(--pure-white);
+}
+
+body.dark_mode .knwldge_hub_section .blog-row-heading-wrap:hover .blog-row-heading {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+body.dark_mode .knwldge_hub_section .blog-row-date {
+  color: var(--pure-white);
+}
+
+body.dark_mode .knwldge_hub_section .blog-row-cat {
+  background: var(--pure-white);
+  color: var(--charcoal-black);
 }
 
 body.dark_mode .eco_logo_prt {
